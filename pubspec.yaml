@@ -68,6 +68,8 @@ flutter:
     - assets/images/chat.png
     - assets/images/11-48-15-802-512-unscreen.gif
     - assets/images/11184177-unscreen.gif
+    - assets/images/download-removebg-preview.png
+    - assets/images/bulles-de-chat-television-icone-illustration-du-dialogue-et-de-la-communication-lumineux-de-style-design-monochrome-bleu-tagc4c-removebg-preview.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

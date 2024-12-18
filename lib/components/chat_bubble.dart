@@ -27,7 +27,7 @@ class MessageBubble extends StatelessWidget {
         isSender: true,
         tail: true,
         textStyle: TextStyle(
-          fontSize: 25,
+          fontSize: 22,
           color: Colors.white,
         ),
       ),
@@ -56,12 +56,13 @@ class MessageBubbleForAFriend extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         text: messageText, // Message text passed as a parameter
         //isSender: isSender, // Sender status passed as a parameter
-        color: const Color.fromARGB(255, 58, 118, 197),
+        color: const Color(0xff93D1EA),
         isSender: false,
         tail: true,
         textStyle: TextStyle(
-          fontSize: 25,
-          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 22,
+          color: const Color.fromARGB(255, 14, 34, 54),
         ),
       ),
     );

@@ -6,30 +6,41 @@ part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(LoginInitial());
-  Future<void> signInUser(
-      {required String email, required String password}) async {
+
+  Future<void> signInUser({
+    required String email,
+    required String password,
+  }) async {
     emit(LoginLoading());
     try {
-      print('Attempting login with email: $email');
-      UserCredential user = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-      print('Login successful for user: ${user.user?.email}');
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
       emit(LoginSuccess());
-      return; // Exit function
     } on FirebaseAuthException catch (e) {
-      print('FirebaseAuthException: ${e.code}');
-      if (e.code == 'user-not-found') {
-        emit(LoginFailure(errMessage: 'User not found'));
-      } else if (e.code == 'wrong-password') {
-        emit(LoginFailure(errMessage: 'Wrong password'));
-      } else if (e.code == 'invalid-email') {
-        emit(LoginFailure(errMessage: 'Invalid Email'));
-      } else {
-        emit(LoginFailure(errMessage: e.message ?? 'Unknown error occurred'));
-      }
+      print('FirebaseAuthException code: ${e.code}'); // Log the error code
+      emit(LoginFailure(errMessage: _getFriendlyErrorMessage(e.code)));
     } catch (e) {
-      print('General Exception: $e');
-      emit(LoginFailure(errMessage: 'Something went wrong: $e'));
+      print('General Exception: $e'); // Log any other errors
+      emit(LoginFailure(errMessage: 'Something went wrong. Please try again.'));
+    }
+  }
+
+  String _getFriendlyErrorMessage(String errorCode) {
+    switch (errorCode) {
+      case 'user-not-found':
+        return 'No account found for this email. Please check and try again.';
+      case 'wrong-password':
+        return 'Incorrect password. Please try again.';
+      case 'invalid-email':
+        return 'The email format is invalid. Please try again.';
+      case 'network-request-failed':
+        return 'Network error. Please check your internet connection.';
+      case 'too-many-requests':
+        return 'Too many login attempts. Please wait and try again.';
+      default:
+        return 'Login failed. Please try again.';
     }
   }
 }

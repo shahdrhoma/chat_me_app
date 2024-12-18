@@ -17,10 +17,14 @@ class RegisterPage extends StatelessWidget {
   static String id = 'RegisterPage';
   String? password;
 
-  GlobalKey<FormState> formKey = GlobalKey();
+  final GlobalKey<FormState> formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
+    // Screen size variables
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return BlocConsumer<RegisterCubit, RegisterState>(
       listener: (context, state) {
         if (state is RegisterLoading) {
@@ -39,28 +43,32 @@ class RegisterPage extends StatelessWidget {
           child: Scaffold(
             backgroundColor: kPrimaryColor,
             body: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.02, // Dynamic horizontal padding
+              ),
               child: Form(
                 key: formKey,
                 child: ListView(
                   children: [
-                    SizedBox(height: 50),
-                    Image.asset(kLogo, height: 250),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Chat Me',
-                          style: TextStyle(
-                              fontFamily: 'Kanit',
-                              color: Colors.white,
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
+                    SizedBox(height: screenHeight * 0.05), // Top spacing
+                    Image.asset(
+                      kLogo,
+                      height: screenHeight * 0.372, // Responsive height
+                      width: screenWidth * 0.8, // Responsive width
                     ),
-                    SizedBox(height: 20),
+                    //  SizedBox(height: screenHeight * 0.01), // Reduced space
+                    Center(
+                      child: Text(
+                        'Chat Me',
+                        style: TextStyle(
+                          fontFamily: 'Kanit',
+                          color: Colors.white,
+                          fontSize: screenWidth * 0.08, // Responsive font size
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -69,38 +77,39 @@ class RegisterPage extends StatelessWidget {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
-                            fontSize: 20,
+                            fontSize:
+                                screenWidth * 0.05, // Responsive font size
                           ),
                         ),
                       ],
                     ),
-                    Container(
-                      child: Column(
-                        children: [
-                          CustomTextField(
-                              onChanged: (data) {
-                                email = data;
-                              },
-                              hintText: 'Email'),
-                          const SizedBox(height: 20),
-                          CustomTextField(
-                            obscureText: true,
-                            onChanged: (data) {
-                              password = data;
-                            },
-                            hintText: 'Password',
-                          ),
-                        ],
-                      ),
+                    SizedBox(height: screenHeight * 0.02),
+                    Column(
+                      children: [
+                        CustomTextField(
+                          onChanged: (data) {
+                            email = data;
+                          },
+                          hintText: 'Email',
+                        ),
+                        SizedBox(height: screenHeight * 0.02),
+                        CustomTextField(
+                          obscureText: true,
+                          onChanged: (data) {
+                            password = data;
+                          },
+                          hintText: 'Password',
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: screenHeight * 0.03),
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       width: double.infinity,
-                      height: 50,
+                      height: screenHeight * 0.07, // Responsive height
                       child: CustomButton(
                         onTap: () async {
                           var auth = FirebaseAuth.instance;
@@ -108,28 +117,32 @@ class RegisterPage extends StatelessWidget {
                             BlocProvider.of<RegisterCubit>(context)
                                 .registerUser(
                                     email: email!, password: password!);
-                          } else {}
+                          }
                         },
                         text: 'Register',
                       ),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: screenHeight * 0.02),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
-                          'You already have an account',
+                          'You already have an account?',
                           style: TextStyle(color: Colors.white),
                         ),
                         GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              ' Login',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
-                            )),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            ' Login',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize:
+                                  screenWidth * 0.04, // Responsive font size
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -143,7 +156,7 @@ class RegisterPage extends StatelessWidget {
   }
 
   Future<void> registerUser(FirebaseAuth auth) async {
-    UserCredential user = await auth.createUserWithEmailAndPassword(
+    await auth.createUserWithEmailAndPassword(
         email: email!, password: password!);
   }
 }

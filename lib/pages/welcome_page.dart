@@ -1,4 +1,3 @@
-import 'package:chats_project/constants.dart';
 import 'package:flutter/material.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -6,6 +5,10 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Screen size variables
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 29, 53, 77), // Background color
       body: SingleChildScrollView(
@@ -16,19 +19,21 @@ class WelcomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 80),
+                padding: EdgeInsets.only(
+                    top: screenHeight *
+                        0.1), // Top padding as a percentage of screen height
                 child: Image.asset(
                   'assets/images/11-48-15-802-512-unscreen.gif',
-                  height: 400,
-                  width: 400,
+                  height: screenHeight * 0.4, // Responsive height
+                  width: screenWidth * 0.8, // Responsive width
                 ),
               ),
               Text(
-                'Welcome to Chat Me ',
+                'Welcome to Chat Me',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Kanit',
-                  fontSize: 36, // Increased font size
+                  fontSize: screenWidth * 0.07, // Dynamic font size
                   fontWeight: FontWeight.bold,
                   color: Colors.white, // Strong contrast color
                   shadows: [
@@ -40,13 +45,13 @@ class WelcomePage extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: screenHeight * 0.02), // Responsive spacing
               Text(
                 'Connect with people, share ideas, and collaborate effortlessly.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Kanit',
-                  fontSize: 22, // Increased font size
+                  fontSize: screenWidth * 0.05, // Dynamic font size
                   fontWeight: FontWeight.bold, // Slightly bold text
                   color: Colors.white,
                   shadows: [
@@ -58,7 +63,7 @@ class WelcomePage extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 40),
+              SizedBox(height: screenHeight * 0.05),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, 'LoginPage');
@@ -66,7 +71,11 @@ class WelcomePage extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Color.fromARGB(255, 29, 53, 77),
                   backgroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  padding: EdgeInsets.symmetric(
+                    horizontal:
+                        screenWidth * 0.15, // Dynamic horizontal padding
+                    vertical: screenHeight * 0.02, // Dynamic vertical padding
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -74,13 +83,14 @@ class WelcomePage extends StatelessWidget {
                 child: Text(
                   'Let\'s Chat',
                   style: TextStyle(
-                    fontSize: 20, // Increased font size
+                    fontSize: screenWidth * 0.05, // Dynamic font size
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 29, 53, 77),
                   ),
                 ),
               ),
-              const SizedBox(height: 30), // Extra spacing at the bottom
+              SizedBox(
+                  height: screenHeight * 0.03), // Extra spacing at the bottom
             ],
           ),
         ),

@@ -18,10 +18,14 @@ class LoginPage extends StatelessWidget {
 
   String? password;
 
-  GlobalKey<FormState> formKey = GlobalKey();
+  final GlobalKey<FormState> formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
+    // Screen size variables
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginLoading) {
@@ -31,7 +35,6 @@ class LoginPage extends StatelessWidget {
           Navigator.pushNamed(context, ChattingPage.id, arguments: email);
         } else if (state is LoginFailure) {
           isLoading = false;
-
           showSnackBar(context, state.errMessage);
         }
       },
@@ -40,28 +43,32 @@ class LoginPage extends StatelessWidget {
         child: Scaffold(
           backgroundColor: kPrimaryColor,
           body: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.02, // Dynamic horizontal padding
+            ),
             child: Form(
               key: formKey,
               child: ListView(
                 children: [
-                  SizedBox(height: 50),
-                  Image.asset(kLogo, height: 250),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Chat Me',
-                        style: TextStyle(
-                            fontFamily: 'Kanit',
-                            color: Colors.white,
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
+                  SizedBox(height: screenHeight * 0.05), // Top spacing
+                  Image.asset(
+                    kLogo,
+                    height: screenHeight * 0.372, // Enlarged height
+                    width: screenWidth * 0.8, // Enlarged width
                   ),
-                  SizedBox(height: 20),
+                  Center(
+                    child: Text(
+                      'Chat Me',
+                      style: TextStyle(
+                        fontFamily: 'Kanit',
+                        color: Colors.white,
+                        fontSize: screenWidth * 0.08, // Responsive font size
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.03),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -70,38 +77,38 @@ class LoginPage extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: screenWidth * 0.05, // Responsive font size
                         ),
                       ),
                     ],
                   ),
-                  Container(
-                    child: Column(
-                      children: [
-                        CustomTextField(
-                            hintText: 'Email',
-                            onChanged: (data) {
-                              email = data;
-                            }),
-                        const SizedBox(height: 20),
-                        CustomTextField(
-                          obscureText: true,
-                          onChanged: (data) {
-                            password = data;
-                          },
-                          hintText: 'Password',
-                        ),
-                      ],
-                    ),
+                  SizedBox(height: screenHeight * 0.02),
+                  Column(
+                    children: [
+                      CustomTextField(
+                        hintText: 'Email',
+                        onChanged: (data) {
+                          email = data;
+                        },
+                      ),
+                      SizedBox(height: screenHeight * 0.02),
+                      CustomTextField(
+                        obscureText: true,
+                        onChanged: (data) {
+                          password = data;
+                        },
+                        hintText: 'Password',
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: screenHeight * 0.03),
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     width: double.infinity,
-                    height: 50,
+                    height: screenHeight * 0.07, // Responsive height
                     child: CustomButton(
                       text: 'Sign in',
                       onTap: () async {
@@ -110,12 +117,12 @@ class LoginPage extends StatelessWidget {
                           BlocProvider.of<LoginCubit>(context)
                               .signInUser(email: email!, password: password!);
                         } else {
-                          print('no thing from the above ');
+                          print('Validation failed.');
                         }
                       },
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: screenHeight * 0.02),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -124,13 +131,18 @@ class LoginPage extends StatelessWidget {
                         style: TextStyle(color: Colors.white),
                       ),
                       GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(context, RegisterPage.id);
-                          },
-                          child: Text(
-                            ' Register',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          )),
+                        onTap: () {
+                          Navigator.pushNamed(context, RegisterPage.id);
+                        },
+                        child: Text(
+                          ' Register',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize:
+                                screenWidth * 0.04, // Responsive font size
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -140,10 +152,5 @@ class LoginPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<void> signInUser(FirebaseAuth auth) async {
-    UserCredential user = await auth.signInWithEmailAndPassword(
-        email: email!, password: password!);
   }
 }
